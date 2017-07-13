@@ -1,0 +1,6 @@
+---
+# defaults file for ansible-mariadb-docker
+image_name: "mariadb:10.3"
+mysql_root_pass: "mysqlr00tp4ss"
+mariadb_data_dir: /var/lib/mysql
+docker_api_version: 1.22

@@ -1,0 +1,23 @@
+---
+# tasks file for ansible-mariadb-docker
+    - name: Create database users
+      mysql_user:
+        login_user: root
+        login_password: "{{mysql_root_pass}}"
+        login_host: "{{inventory_hostname | get_hostname}}"
+        name: "{{item.user}}"
+        password: "{{item.pass}}"
+        priv: '*.*:ALL,GRANT'
+        host: "%"
+      with_items: "{{ users }}"
+      run_once: true
+
+    - name: Create databases
+      mysql_db:
+        name: "{{item}}"
+        state: present
+        login_user: root
+        login_password: "{{mysql_root_pass}}"
+        login_host: "{{inventory_hostname | get_hostname}}"
+      with_items: "{{ databases }}"
+      run_once: true

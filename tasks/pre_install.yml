@@ -1,0 +1,21 @@
+---
+# tasks file for ansible-mariadb-docker
+    - name: Install some dependencies
+      yum:
+        name: "{{item}}"
+        state: present
+      with_items:
+        - "MySQL-python"
+        - "mariadb"
+
+    - name: Create mysql conf.d directory
+      file:
+        path: /etc/mysql/conf.d
+        state: directory
+        mode: 0755
+      register: dir_create
+
+    - name: Copy mariadb cluster config template
+      template:
+        src: mysql_server.cnf.j2
+        dest: /etc/mysql/conf.d/mysql_server.cnf

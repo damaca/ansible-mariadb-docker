@@ -1,0 +1,41 @@
+---
+# tasks file for ansible-mariadb-docker
+    - name: Check if exist files in {{mariadb_data_dir}} and is needed to bootstrap
+      find:
+        paths: "{{mariadb_data_dir}}"
+      register: files
+
+    - name: mariadb container in bootstrap node
+      docker_container:
+        name: mariadb
+        image: "{{image_name}}"
+        state: started
+        command: "{% if files.matched == 0 %}--wsrep-new-cluster {% endif %}--wsrep_node_address={{ ansible_default_ipv4['address'] }} --wsrep_node_name={{inventory_hostname | get_hostname}}"
+        pull: true
+        docker_api_version: "{{ docker_api_version }}"
+        restart_policy: always
+        network_mode: host
+        env:
+          MYSQL_ROOT_PASSWORD: "{{mysql_root_pass}}"
+          MYSQL_INITDB_SKIP_TZINFO: "yes"
+        ports:
+          - "3306:3306"
+          - "4444:4444"
+          - "4567:4567/udp"
+          - "4567:4567"
+          - "4568:4568"
+        exposed:
+          - "3306"
+          - "4444"
+          - "4567/udp"
+          - "4567"
+          - "4568"
+        volumes:
+          - "{{mariadb_data_dir}}:/var/lib/mysql"
+          - "/etc/mysql/conf.d:/etc/mysql/conf.d"
+      when: inventory_hostname == play_hosts[0]
+
+    - name: wait some seconds to finish bootstrap
+      pause:
+        seconds: 20
+      when: inventory_hostname == play_hosts[0] and files.matched == 0
