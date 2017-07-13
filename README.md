@@ -10,17 +10,17 @@ Needs docker,docker-py installed in the hosts
 
 Role Variables
 --------------
-
-image_name: "mariadb:10.3"
-mysql_root_pass: "mysqlr00tp4ss"
-mariadb_data_dir: /var/lib/mysql
-docker_api_version: 1.22
-users:
-  - name: username
-    pass: pass
-databases:
-  - test_db
-
+```
+  image_name: "mariadb:10.3"
+  mysql_root_pass: "mysqlr00tp4ss"
+  mariadb_data_dir: /var/lib/mysql
+  docker_api_version: 1.22
+  users:
+    - name: username
+      pass: pass
+  databases:
+    - test_db
+```
 Example Playbook
 ----------------
 
