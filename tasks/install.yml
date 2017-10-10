@@ -11,10 +11,11 @@
         name: mariadb
         image: "{{image_name}}"
         state: started
-        command: "--wsrep_node_address={{ ansible_default_ipv4['address'] }}  --wsrep_node_name={{inventory_hostname | get_hostname}}"
+        command: "--wsrep_node_address={{ ansible_default_ipv4['address'] }}  --wsrep_node_name={{ inventory_hostname }}"
         pull: true
         docker_api_version: "{{ docker_api_version }}"
         restart_policy: always
+        privileged: True
         network_mode: host
         env:
           MYSQL_ROOT_PASSWORD: "{{mysql_root_pass}}"
