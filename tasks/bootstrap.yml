@@ -54,5 +54,5 @@
 
     - name: wait some seconds to finish bootstrap
       pause:
-        seconds: 20
+        seconds: 30
       when: inventory_hostname == ansible_play_batch[0] and BOOTSTRAP_NEEDED

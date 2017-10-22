@@ -43,6 +43,22 @@
       retries: 5
       delay: 10
 
+    - name: wait some seconds
+      pause:
+        seconds: 60
+      when: inventory_hostname == ansible_play_batch[0] and BOOTSTRAP_NEEDED
+
+    - name: mariadb container
+      docker_container:
+        name: mariadb
+        state: absent
+      when: inventory_hostname == ansible_play_batch[0] and BOOTSTRAP_NEEDED
+
+    - name: wait some seconds
+      pause:
+        seconds: 30
+      when: inventory_hostname == ansible_play_batch[0] and BOOTSTRAP_NEEDED
+
     - name: mariadb container
       docker_container:
         name: mariadb
@@ -53,7 +69,6 @@
         docker_api_version: "{{ docker_api_version }}"
         restart_policy: always
         network_mode: host
-        recreate: true
         env:
           MYSQL_ROOT_PASSWORD: "{{mysql_root_pass}}"
           MYSQL_INITDB_SKIP_TZINFO: "yes"
