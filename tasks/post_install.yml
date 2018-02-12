@@ -11,6 +11,8 @@
         host: "%"
       with_items: "{{ users }}"
       run_once: true
+      loop_control:
+        label: "{{item.user}}"
 
     - name: Create databases
       mysql_db:
