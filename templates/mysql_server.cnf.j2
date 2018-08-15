@@ -11,11 +11,13 @@ innodb_locks_unsafe_for_binlog=1
 query_cache_size=0
 query_cache_type=0
 
+{% if mariadb_cluster_enabled %}
 [galera]
 wsrep_on=ON
 wsrep_provider="/usr/lib/galera/libgalera_smm.so"
 wsrep_cluster_address="gcomm://{% for host in ansible_play_batch %}{{hostvars[host].ansible_default_ipv4['address']}}{% if not loop.last %},{% endif %}{% endfor %}"
 wsrep-sst-method=rsync
+{% endif %}
 
 #
 # Optional setting

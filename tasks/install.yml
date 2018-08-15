@@ -42,22 +42,23 @@
       until: '"JOINED" in outputlog.stderr'
       retries: 5
       delay: 10
+      when: mariadb_cluster_enabled
 
     - name: wait some seconds
       pause:
         seconds: 60
-      when: inventory_hostname == ansible_play_batch[0] and BOOTSTRAP_NEEDED
+      when: inventory_hostname == ansible_play_batch[0] and BOOTSTRAP_NEEDED and mariadb_cluster_enabled
 
     - name: mariadb container
       docker_container:
         name: mariadb
         state: absent
-      when: inventory_hostname == ansible_play_batch[0] and BOOTSTRAP_NEEDED
+      when: inventory_hostname == ansible_play_batch[0] and BOOTSTRAP_NEEDED and mariadb_cluster_enabled
 
     - name: wait some seconds
       pause:
         seconds: 30
-      when: inventory_hostname == ansible_play_batch[0] and BOOTSTRAP_NEEDED
+      when: inventory_hostname == ansible_play_batch[0] and BOOTSTRAP_NEEDED and mariadb_cluster_enabled
 
     - name: mariadb container
       docker_container:
@@ -87,7 +88,7 @@
         volumes:
           - "{{mariadb_data_dir}}:/var/lib/mysql"
           - "/etc/mysql/conf.d:/etc/mysql/conf.d"
-      when: inventory_hostname == ansible_play_batch[0] and BOOTSTRAP_NEEDED
+      when: inventory_hostname == ansible_play_batch[0] and BOOTSTRAP_NEEDED and mariadb_cluster_enabled
 
     - name: wait until node is synced
       command: docker logs mariadb
@@ -95,8 +96,9 @@
       until: '"JOINED" in outputlog.stderr'
       retries: 5
       delay: 10
-      when: inventory_hostname == ansible_play_batch[0] and BOOTSTRAP_NEEDED
+      when: inventory_hostname == ansible_play_batch[0] and BOOTSTRAP_NEEDED and mariadb_cluster_enabled
 
     - name: wait some seconds
       pause:
         seconds: 30
+      when: mariadb_cluster_enabled
