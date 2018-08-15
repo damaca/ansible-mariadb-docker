@@ -29,6 +29,7 @@ Including an example of how to use your role (for instance, with variables passe
     - hosts: servers
       roles:
         -  role: ansible-mariadb-docker
+           mariadb_cluster_enabled: false # true by default
            users:
              - user: test_user
                pass: test_pass
