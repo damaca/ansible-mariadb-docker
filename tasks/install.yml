@@ -3,6 +3,7 @@
     - name: Run mysql_upgrade just in case
       shell: docker exec mariadb mysql_upgrade -uroot -p{{mysql_root_pass}}
       when: inventory_hostname == ansible_play_batch[0]
+      failed_when: false
 
     - name: create mysql dir in {{mariadb_data_dir}} just for the not bootstrap nodes
       file:
